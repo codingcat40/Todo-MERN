@@ -5,52 +5,119 @@ const ListItems = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [priority, setPriority] = useState("");
+  const [formData, setFormData] = useState({
+    title: "",
+    description: "",
+    priority: "",
+  })
 
   const [enableEdit, setEnableEdit] = useState(false);
 
+  // save changes
+  const handleEditSubmit = (e) => {
+    e.preventDefault();
+    setFormData({title, description, priority});
+  }
 
+
+  // item delete function
   const handleDelete = () => {
 
   }
 
 
   return (
-    <div className=" flex flex-row justify-between bg-gradient-to-r pl-12 from-purple-500 to-black min-h-screen pt-20">
-      <div className="justify-center items-center flex flex-col gap-8 max-w-3xl min-w-lg">
-        {todos.map((item, index) => (
-          <div
-            key={index}
-            className="border shadow-gray-500 bg-white flex flex-col rounded-xl overflow-hidden min-w-xl"
-          >
-            <div className="flex flex-col p-4 gap-3">
-              <div className='flex flex-row justify-between'>
-              <span className="text-lg font-semibold truncate max-w-xl">{item.title}</span>
+    <div className="flex flex-row justify-start bg-gradient-to-r from-purple-500 to-black min-h-screen pt-20 px-12 gap-12">
+  {/* Left side: Todo cards */}
+  <div className="flex flex-col gap-8 max-w-3xl w-full">
+    {todos.map((item, index) => (
+      <div
+        key={index}
+        className="border shadow-md bg-white flex flex-col rounded-xl overflow-hidden w-full"
+      >
+        <div className="flex flex-col p-4 gap-3">
+          <div className="flex flex-row justify-between items-center">
+            <span className="text-lg font-semibold truncate max-w-sm text-gray-900">
+              {item.title}
+            </span>
 
-              <span className='flex gap-4'>
-              <span className='bg-black text-white px-4 py-2 rounded-2xl shadow-yellow-100 hover:shadow-xl cursor-pointer' onClick={() => setEnableEdit(!enableEdit)}> Edit </span>
-              <span className='bg-red-600 py-2 px-4 rounded-2xl cursor-pointer text-white hover:shadow-2xl shadow-red-500' onClick={handleDelete}>Delete</span>
-              </span>
-              </div>
-              <hr className="my-2" />
-              <p className="text-sm text-gray-700 italic line-clamp-2 max-w-lg">{item.description}</p>
-              <p className='font-thin italic text-sm '>{item.dueDate.slice(0, 10)}</p>
-              <span className='italic font-light text-center bg-black p-1 max-w-2xs rounded-xl text-white'>{item.priority}</span>
+            <div className="flex gap-3">
+              <button
+                className="bg-black text-white px-4 py-1.5 rounded-2xl shadow hover:shadow-lg cursor-pointer text-sm"
+                onClick={() => setEnableEdit(!enableEdit)}
+              >
+                Edit
+              </button>
+              <button
+                className="bg-red-600 px-4 py-1.5 rounded-2xl cursor-pointer text-white hover:shadow-lg text-sm"
+                onClick={handleDelete}
+              >
+                Delete
+              </button>
             </div>
           </div>
-        ))}
+
+          <hr className="my-2" />
+
+          <p className="text-sm text-gray-700 italic line-clamp-2 max-w-lg">
+            {item.description}
+          </p>
+          <p className="font-thin italic text-sm text-gray-600">
+            {item.dueDate.slice(0, 10)}
+          </p>
+          <span className="italic font-light text-center bg-black px-2 py-1 max-w-min rounded-xl text-white text-xs">
+            {item.priority}
+          </span>
+        </div>
       </div>
-      
-      <form className='text-white border border-white'>
-      {
-              enableEdit && <div className='flex flex-col'>
-                <form>
-                  <label>Title:  <input type="text" onChange={(e) => setTitle(e.target.value)}/></label>
-                  <label> Description: <textarea type='text' onChange={(e) => setDescription(e.target.value)}></textarea> </label>
-                </form>
-              </div>
-      }
+    ))}
+  </div>
+
+  {/* Right side: Edit form */}
+  <div className={`flex flex-col w-96 ${enableEdit && 'bg-white'} rounded-xl shadow-md p-6 max-h-fit`}>
+    {enableEdit && (
+      <form className="flex flex-col gap-4">
+        <label className="flex flex-col text-gray-800 text-sm font-medium">
+          Title
+          <input
+            type="text"
+            className="mt-1 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+            onChange={(e) => setTitle(e.target.value)}
+          />
+        </label>
+
+        <label className="flex flex-col text-gray-800 text-sm font-medium">
+          Description
+          <textarea
+            rows="4"
+            className="mt-1 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+            onChange={(e) => setDescription(e.target.value)}
+          ></textarea>
+        </label>
+
+        <label className='flex flex-col text-gray-800 text-sm font-medium'>
+          Priority 
+          <span className='flex gap-8'>
+            <button className='px-2 py-1 bg-green-500 text-white font-bold rounded-lg' onClick={()=>setPriority("Low")}>Low</button>
+            <button className='px-2 py-1 bg-yellow-500 text-white font-bold rounded-lg' onClick={() => setPriority("Medium")}>Medium</button>
+
+            <button className='px-2 py-1 bg-red-500 text-white font-bold rounded-lg' onClick={() => setPriority("High")}>High</button>
+
+          </span>
+        </label>
+
+        <button
+          type="submit"
+          className="bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition"
+          onClick={handleEditSubmit}
+        >
+          Save Changes
+        </button>
       </form>
+    )}
+  </div>
 </div>
+
 
   )
 }
