@@ -1,21 +1,23 @@
 import React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Signup = () => {
   const navigate = useNavigate();
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-  }
-
+    axios
+      .post("http://localhost:3001/api/user/post", { name, email, password })
+      .then((response) => console.log(response.data))
+      .catch((err) => console.log(err));
+  };
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  
+
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-50">
       <div className="w-full max-w-md bg-white shadow-lg rounded-xl p-8">
