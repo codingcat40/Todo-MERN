@@ -5,6 +5,7 @@ import { connectDB } from './lib/db.js';
 import cors from 'cors';
 import helmet from 'helmet';
 import userRoute from './routes/userRoute.js'
+import session from 'express-session';
 
 dotenv.config();
 
@@ -16,6 +17,20 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(cors());
 app.use(helmet());
+
+
+// session
+app.use(session({
+    secret: process.env.SESSION_SECRET_KEY,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        maxAge: 1800 * 1000, //30 mins
+        secure: false,
+        httpOnly: true
+    }
+
+}));
 
 // using the routes
 app.use('/api', userRoute);

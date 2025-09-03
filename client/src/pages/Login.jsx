@@ -1,18 +1,23 @@
 import React from 'react'
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom'
+import axios from 'axios';
 
 const Login = () => {
   const navigate = useNavigate();
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    await axios.post('http://localhost:3001/api/user/login', {email, password}).then(res => console.log(res.data)).catch((err) => {console.log(err), setError(err.message)}).finally(() => {
+      setEmail("");
+      setPassword("");
+    })
   }
 
 
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const [error, setError] = useState("");
 
 
   return (
@@ -32,7 +37,7 @@ const Login = () => {
 
           <button type='submit' className='cursor-pointer w-full bg-black text-white py-2 rounded-lg transition-all ease-in-out duration-300 hover:bg-green-800'>Login</button>
           
-         
+         <p className='text-red-400'>{error}</p>
         </form>
 
          <p className="text-sm text-gray-600 mt-4 text-center">

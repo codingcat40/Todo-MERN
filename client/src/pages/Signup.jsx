@@ -5,14 +5,22 @@ import axios from "axios";
 
 const Signup = () => {
   const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
     axios
       .post("http://localhost:3001/api/user/post", { name, email, password })
       .then((response) => console.log(response.data))
-      .catch((err) => console.log(err));
-  };
+      .catch((err) => setErrorMessage(err.message)).finally(() => {
+        setName("");
+        setEmail("");
+        setPassword("");
+      });
+    } 
+
+ 
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -60,6 +68,10 @@ const Signup = () => {
           >
             Sign Up
           </button>
+
+          {
+            errorMessage && <p className="text-red-500 text-2xl">Error Creating the user: {errorMessage}</p>
+          }
         </form>
 
         <p className="text-sm text-gray-600 mt-4 text-center">
