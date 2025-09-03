@@ -11,7 +11,7 @@ const Signup = () => {
     e.preventDefault();
     
     axios
-      .post("http://localhost:3001/api/user/post", { name, email, password })
+      .post("http://localhost:3001/api/user/post", { name, email, password }, {withCredentials: true})
       .then((response) => console.log(response.data))
       .catch((err) => setErrorMessage(err.message)).finally(() => {
         setName("");

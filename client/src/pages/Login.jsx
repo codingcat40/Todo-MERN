@@ -7,7 +7,7 @@ const Login = () => {
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await axios.post('http://localhost:3001/api/user/login', {email, password}).then(res => console.log(res.data)).catch((err) => {console.log(err), setError(err.message)}).finally(() => {
+    await axios.post('http://localhost:3001/api/user/login', {email, password}, {withCredentials: true}).then(res => console.log(res.data)).catch((err) => {console.log(err), setError(err.message)}).finally(() => {
       setEmail("");
       setPassword("");
     })

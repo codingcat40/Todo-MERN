@@ -5,6 +5,10 @@ import bcrypt from 'bcrypt'
 const router  = express.Router();
 
 
+router.get("/check-session", (req, res) => {
+  console.log(req.session);
+  res.json(req.session);
+});
 
 // user signup route
 router.post('/user/post', async (req, res) => {
@@ -48,8 +52,16 @@ router.post('/user/login', async (req, res) => {
 
                 if(result){
                     req.session.userId = user._id;
-                    res.json({success: true, message: 'User Authenticated'})
-                    
+                    req.session.save(errr => {
+                        if(errr){
+                            console.log("Session Save Error: ", errr);
+                            return res.status(500).json({success:false, message: "Session save failed"})
+                        }
+                                            res.json({success: true, message: 'User Authenticated'})
+
+                        
+                    })
+
                 }
                 else{
                     res.json({success: false, message: 'Authentication Failed!'})
