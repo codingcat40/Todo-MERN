@@ -2,10 +2,26 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import Logo from '../assets/Logo.png'
 import { useState } from 'react'
+import { useEffect } from 'react'
+import axios from 'axios'
 
 const Navbar = () => {
-  const [loggedIn, setLoggedIn] = useState(true);
+  const [loggedIn, setLoggedIn] = useState(false);
+  
+  // check if there is any active session
+  useEffect( () => {
+    
+     axios.get('http://localhost:3001/api/check-session', {withCredentials: true}).then((res) => {
+        setLoggedIn(res.data.loggedIn);
+      }).catch((err) => console.log(err))
 
+    
+  }, [])
+
+
+  const handleLogout = () => {
+      
+  }
 
   return (
     <nav className='bg-white shadow-md fixed w-full top-0 left-0 z-50'>
@@ -13,12 +29,13 @@ const Navbar = () => {
           <img src={Logo} className='h-6 w-6 cursor-pointer'/>
 
           <ul className='hidden md:flex space-x-6 text-gray-600 font-medium'>
-            <Link to='/' className='hover:text-green-600 cursor-pointer'>Home</Link>
+            <Link to='/' className='hover:text-green-600 p-1 cursor-pointer'>Home</Link>
             {
               loggedIn && <>
-              <Link to='/todo-items' className='hover:text-green-600 cursor-pointer'>To-do List</Link>
-              <Link to='/notes-items' className='hover:text-green-600 cursor-pointer'>Notes</Link>
-            </> 
+              <Link to='/todo-items' className='hover:text-green-600 p-1 cursor-pointer'>To-do List</Link>
+              <Link to='/notes-items' className='hover:text-green-600 p-1 cursor-pointer'>Notes</Link>
+              <button onClick={handleLogout} className='hover:text-red-600 hover:text-lg p-1 cursor-pointer transition-all duration-200 hover:rounded-xl'>Logout</button>
+            </>
             }
             
           </ul>

@@ -10,14 +10,25 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    axios
-      .post("http://localhost:3001/api/user/post", { name, email, password }, {withCredentials: true})
-      .then((response) => console.log(response.data))
-      .catch((err) => setErrorMessage(err.message)).finally(() => {
-        setName("");
-        setEmail("");
-        setPassword("");
-      });
+    try {
+      const res = await axios.post("http://localhost:3001/api/user/post", {name, email, password}, {withCredentials: true})
+      if(res.data.success){
+        // go to list route straight
+        navigate('/todo-items');
+      }
+      else{
+        setErrorMessage(res.data.message || 'Error Signing Up!')
+      }
+    } catch (error) {
+      setErrorMessage(error.message);
+    }
+    finally{
+      setName("");
+      setEmail("");
+      setPassword("");
+    }
+
+    
     } 
 
  

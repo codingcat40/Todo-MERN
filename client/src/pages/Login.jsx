@@ -7,10 +7,29 @@ const Login = () => {
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await axios.post('http://localhost:3001/api/user/login', {email, password}, {withCredentials: true}).then(res => console.log(res.data)).catch((err) => {console.log(err), setError(err.message)}).finally(() => {
-      setEmail("");
-      setPassword("");
-    })
+
+    try {
+      const res = await axios.post('http://localhost:3001/api/user/login', {email, password}, {withCredentials: true})
+      if(res.data.success){
+        // login success
+        // go back to todo list
+        navigate('/todo-items')
+
+      }
+      else{
+        setError(res.data.message || 'Login Failed')
+      }
+    } catch (error) {
+      setError(error.message)
+    }
+    finally{
+      () => {
+        setEmail("");
+        setPassword("");
+      }
+    }
+    
+
   }
 
 

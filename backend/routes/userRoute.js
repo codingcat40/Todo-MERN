@@ -5,9 +5,16 @@ import bcrypt from 'bcrypt'
 const router  = express.Router();
 
 
+// to get the session info
 router.get("/check-session", (req, res) => {
-  console.log(req.session);
-  res.json(req.session);
+  if(req.session.userId){
+    res.json({loggedIn: true, userId: req.session.userId})
+  }
+  else{
+    res.json({loggedIn:false})
+  }
+
+
 });
 
 // user signup route
