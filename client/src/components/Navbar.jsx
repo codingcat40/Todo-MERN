@@ -1,26 +1,29 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import Logo from '../assets/Logo.png'
-import { useState } from 'react'
 import { useEffect } from 'react'
 import axios from 'axios'
 
 const Navbar = () => {
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(true);
+  const navigate = useNavigate();
   
   // check if there is any active session
-  useEffect( () => {
+  useEffect(() => {
     
      axios.get('http://localhost:3001/api/check-session', {withCredentials: true}).then((res) => {
         setLoggedIn(res.data.loggedIn);
       }).catch((err) => console.log(err))
 
     
-  }, [])
+  }, [setLoggedIn])
 
 
-  const handleLogout = () => {
-      
+  const handleLogout = async () => {
+      await axios.post('http://localhost:3001/api/user/logout', {}, {withCredentials: true}).then(() => {
+        setLoggedIn(false);
+        navigate('/');
+      }).catch(err => console.log(err));
   }
 
   return (

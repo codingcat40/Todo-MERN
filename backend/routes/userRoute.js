@@ -17,6 +17,8 @@ router.get("/check-session", (req, res) => {
 
 });
 
+
+
 // user signup route
 router.post('/user/post', async (req, res) => {
     try {
@@ -79,6 +81,25 @@ router.post('/user/login', async (req, res) => {
     } catch (error) {
         console.log(error)
         res.json({success: false, message: error.message})
+    }
+})
+
+
+
+// logout route
+router.post('/user/logout', (req, res) => {
+    if(req.session){
+        req.session.destroy(err => {
+            if(err){
+                console.error(err)
+                res.status(500).send('Failed to Destroy the session');
+            }
+            res.clearCookie('connect.sid');
+            return res.status(200).json('Logout Successful');
+        })
+    }
+    else{
+        return res.status(200).json('No active session');
     }
 })
 
