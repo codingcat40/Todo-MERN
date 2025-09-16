@@ -1,17 +1,42 @@
 import React, { useState } from 'react'
 import { todos } from '../assets'
+import CreateToDo from './CreateToDo';
+import axios from 'axios';
 
 const ListItems = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [priority, setPriority] = useState("");
+  const [date, setDate] = useState("");
+
   const [formData, setFormData] = useState({
     title: "",
     description: "",
     priority: "",
+    date: Date.now(),
   })
 
   const [enableEdit, setEnableEdit] = useState(false);
+
+
+  const fetchTodos = async () => {
+
+    try {
+    let todo_items = []
+    const response = await axios.get("http://localhost:3001/api/todos/get", {withCredentials: true})
+    const data = await response.data
+    todo_items.push(data)
+        return todo_items
+
+    } catch (error) {
+      console.log("Error fetching data", error)  
+    }
+
+
+    
+  }
+
+
 
   // save changes
   const handleEditSubmit = (e) => {
@@ -75,7 +100,7 @@ const ListItems = () => {
 
   {/* Right side: Edit form */}
   <div className={`flex flex-col w-96 ${enableEdit && 'bg-white'} rounded-xl shadow-md p-6 max-h-fit`}>
-    {enableEdit && (
+    {enableEdit ? (
       <form className="flex flex-col gap-4">
         <label className="flex flex-col text-gray-800 text-sm font-medium">
           Title
@@ -114,7 +139,7 @@ const ListItems = () => {
           Save Changes
         </button>
       </form>
-    )}
+    ) : <CreateToDo />}
   </div>
 </div>
 

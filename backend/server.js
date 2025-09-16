@@ -5,6 +5,7 @@ import { connectDB } from './lib/db.js';
 import cors from 'cors';
 import helmet from 'helmet';
 import userRoute from './routes/userRoute.js'
+import todoRoute from './routes/todoRoute.js'
 import session from 'express-session';
 
 dotenv.config();
@@ -37,6 +38,7 @@ app.use(session({
 
 // using the routes
 app.use('/api', userRoute);
+app.use('/api', todoRoute);
 
 
 const port = 3001 || process.env.PORT;
