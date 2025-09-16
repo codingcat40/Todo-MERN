@@ -2,7 +2,7 @@ import axios from 'axios';
 import React from 'react'
 import { useState } from 'react'
 
-const CreateToDo = () => {
+const CreateToDo = ({onTodoCreated}) => {
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -16,7 +16,7 @@ const CreateToDo = () => {
     try {
       const res = await axios.post("http://localhost:3001/api/todo/create", {title, description, priority, date}, {withCredentials: true})
       console.log("todo is created", res.data);
-
+      if(onTodoCreated) onTodoCreated(res.data)
       setTitle("");
       setDescription("");
       setPriority("");
@@ -38,6 +38,7 @@ const CreateToDo = () => {
           Title
           <input
             type="text"
+            value={title}
             className="mt-1 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
             onChange={(e) => setTitle(e.target.value)}
           />
@@ -47,6 +48,7 @@ const CreateToDo = () => {
           Description
           <textarea
             rows="4"
+            value={description}
             className="mt-1 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
             onChange={(e) => setDescription(e.target.value)}
           ></textarea>
@@ -55,10 +57,10 @@ const CreateToDo = () => {
         <label className='flex flex-col text-gray-800 text-sm font-medium'>
           Priority 
           <span className='flex gap-8'>
-            <button type="button" className='px-2 py-1 bg-green-500 text-white font-bold rounded-lg' onClick={()=>setPriority("Low")}>Low</button>
-            <button type="button" className='px-2 py-1 bg-yellow-500 text-white font-bold rounded-lg' onClick={() => setPriority("Medium")}>Medium</button>
+            <button type="button" className='px-2 py-1 bg-green-500 text-white font-bold rounded-lg' value={priority} onClick={()=>setPriority("Low")}>Low</button>
+            <button type="button" className='px-2 py-1 bg-yellow-500 text-white font-bold rounded-lg' value={priority} onClick={() => setPriority("Medium")}>Medium</button>
 
-            <button type='button' className='px-2 py-1 bg-red-500 text-white font-bold rounded-lg' onClick={() => setPriority("High")}>High</button>
+            <button type='button' className='px-2 py-1 bg-red-500 text-white font-bold rounded-lg' value={priority} onClick={() => setPriority("High")}>High</button>
 
           </span>
         </label>

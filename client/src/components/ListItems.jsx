@@ -1,5 +1,4 @@
-import React, { useState } from 'react'
-import { todos } from '../assets'
+import React, { useEffect, useState } from 'react'
 import CreateToDo from './CreateToDo';
 import axios from 'axios';
 
@@ -7,34 +6,36 @@ const ListItems = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [priority, setPriority] = useState("");
-  const [date, setDate] = useState("");
+  // const [date, setDate] = useState("");
+  const [todos, setTodos] = useState([]);
+  const [enableEdit, setEnableEdit] = useState(false);
+
 
   const [formData, setFormData] = useState({
     title: "",
     description: "",
     priority: "",
-    date: Date.now(),
+    date: "",
   })
 
-  const [enableEdit, setEnableEdit] = useState(false);
+  
+  useEffect(() => {
+    fetchTodos()
+  }, [])
+
 
 
   const fetchTodos = async () => {
-
-    try {
-    let todo_items = []
-    const response = await axios.get("http://localhost:3001/api/todos/get", {withCredentials: true})
-    const data = await response.data
-    todo_items.push(data)
-        return todo_items
-
-    } catch (error) {
-      console.log("Error fetching data", error)  
-    }
-
-
-    
+  try {
+    const response = await axios.get("http://localhost:3001/api/todos/get", { withCredentials: true });
+    const data = response.data;
+    console.log(data);
+    setTodos(data); // directly set array of todos
+  } catch (error) {
+    console.log("Error fetching data", error);
   }
+};
+
 
 
 
@@ -46,8 +47,17 @@ const ListItems = () => {
 
 
   // item delete function
-  const handleDelete = () => {
-
+  const handleDelete = async (todoId) => {
+    try {
+      await axios.post("http://localhost:3001/api/todo/delete", {todoId}, {
+        withCredentials: true
+      })
+      setTodos(todos.filter(item => item._id != todoId));
+      alert('Task Deleted Successfully!')
+    } catch (error) {
+      alert('You are not authorized to delete the Item');
+      console.log("Error deleting the todo", error);
+    }
   }
 
 
@@ -55,7 +65,7 @@ const ListItems = () => {
     <div className="flex flex-row justify-start bg-gradient-to-r from-purple-500 to-black min-h-screen pt-20 px-12 gap-12">
   {/* Left side: Todo cards */}
   <div className="flex flex-col gap-8 max-w-3xl w-full">
-    {todos.map((item, index) => (
+    {todos && todos.map((item, index) => (
       <div
         key={index}
         className="border shadow-md bg-white flex flex-col rounded-xl overflow-hidden w-full"
@@ -75,7 +85,7 @@ const ListItems = () => {
               </button>
               <button
                 className="bg-red-600 px-4 py-1.5 rounded-2xl cursor-pointer text-white hover:shadow-lg text-sm"
-                onClick={handleDelete}
+                onClick={() => handleDelete(item._id)}
               >
                 Delete
               </button>
@@ -88,7 +98,7 @@ const ListItems = () => {
             {item.description}
           </p>
           <p className="font-thin italic text-sm text-gray-600">
-            {item.dueDate.slice(0, 10)}
+            {/* {item.date.slice(0, 10)} */}
           </p>
           <span className="italic font-light text-center bg-black px-2 py-1 max-w-min rounded-xl text-white text-xs">
             {item.priority}
@@ -139,7 +149,7 @@ const ListItems = () => {
           Save Changes
         </button>
       </form>
-    ) : <CreateToDo />}
+    ) : <CreateToDo onTodoCreated = { (newTodo) => setTodos([newTodo, ...todos])}/>}
   </div>
 </div>
 
