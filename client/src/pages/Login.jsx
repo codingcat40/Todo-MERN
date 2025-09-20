@@ -2,9 +2,11 @@ import React from 'react'
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios';
+import { useAuth } from '../context/AuthContext';
 
 const Login = () => {
   const navigate = useNavigate();
+  const {setLoggedIn} = useAuth()
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -13,7 +15,7 @@ const Login = () => {
       if(res.data.success){
         // login success
         // go back to todo list
-        
+        setLoggedIn(true)
         navigate('/todo-items')
 
       }

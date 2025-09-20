@@ -3,16 +3,17 @@ import { Link, useNavigate } from 'react-router-dom'
 import Logo from '../assets/Logo.png'
 import { useEffect } from 'react'
 import axios from 'axios'
+import { useAuth } from '../context/AuthContext'
 
 const Navbar = () => {
-  const [loggedIn, setLoggedIn] = useState(true);
+  const {loggedIn, setLoggedIn} = useAuth()
   const navigate = useNavigate();
   
   // check if there is any active session
   useEffect(() => {
     
      axios.get('http://localhost:3001/api/check-session', {withCredentials: true}).then((res) => {
-        setLoggedIn(res.data.loggedIn);
+        setLoggedIn(true);
       }).catch((err) => console.log(err))
 
     
