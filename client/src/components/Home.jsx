@@ -1,9 +1,11 @@
 // src/components/Home.jsx
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const Home = () => {
   const navigate = useNavigate();
+  const {loggedIn} = useAuth();
   return (
     <div className="font-sans">
       {/* Hero Section */}
@@ -13,13 +15,16 @@ const Home = () => {
             Organize Your Life With Ease ✨
           </h1>
           <p className="text-lg text-gray-700 mb-6">
-            Keep track of your <span className="font-semibold">notes</span> and{" "}
+            Keep track of your <span className="font-semibold">tasks </span> or {" "}
             <span className="font-semibold">to-dos</span> in one simple, powerful app. 
             Boost your productivity and never forget a task again.
           </p>
-          <button onClick={()=>navigate('/signup')} className="px-6 py-3 bg-green-600 text-white rounded-xl text-lg shadow hover:bg-green-700 transition">
+          {
+            !loggedIn && <button onClick={()=>navigate('/signup')} className="px-6 py-3 bg-green-600 text-white rounded-xl text-lg shadow hover:bg-green-700 transition">
             Get Started 🚀
           </button>
+          }
+          
         </div>
 
         {/* Replace with your own PNG */}
@@ -33,18 +38,8 @@ const Home = () => {
       {/* Features Section */}
       <section className="px-6 md:px-20 py-16 text-center">
         <h2 className="text-3xl font-bold mb-12">Why Choose Our App?</h2>
-        <div className="grid gap-10 md:grid-cols-3">
-          <div className="flex flex-col items-center">
-            <img
-              src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
-              alt="Notes"
-              className="w-20 mb-4"
-            />
-            <h3 className="text-xl font-semibold mb-2">Smart Notes</h3>
-            <p className="text-gray-600">
-              Write and organize your ideas, thoughts, and plans in one place.
-            </p>
-          </div>
+        <div className="grid gap-10 md:grid-cols-2">
+        
 
           <div className="flex flex-col items-center">
             <img
@@ -78,7 +73,7 @@ const Home = () => {
         <p className="text-lg mb-6">
           Join thousands of users boosting productivity with our Notes + To-Do app.
         </p>
-        <button onClick={()=>navigate('/login')} className="cursor-pointer px-6 py-3 bg-white text-green-600 rounded-xl text-lg font-semibold shadow hover:bg-gray-100 transition">
+        <button onClick={()=>navigate(`${!loggedIn ? '/login' : '/todo-items'}`)} className="cursor-pointer px-6 py-3 bg-white text-green-600 rounded-xl text-lg font-semibold shadow hover:bg-gray-100 transition">
           Start Now – It’s Free 🎉
         </button>
       </section>

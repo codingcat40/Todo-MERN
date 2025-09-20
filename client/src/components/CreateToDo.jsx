@@ -40,6 +40,7 @@ const CreateToDo = ({onTodoCreated}) => {
             type="text"
             required
             value={title}
+            placeholder='Title...'
             className="mt-1 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
             onChange={(e) => setTitle(e.target.value)}
           />
@@ -48,8 +49,9 @@ const CreateToDo = ({onTodoCreated}) => {
         <label className="flex flex-col text-gray-800 text-sm font-medium">
           Description
           <textarea
-            rows="4"
+            rows="3"
             required
+            placeholder='Task Description...'
             value={description}
             className="mt-1 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
             onChange={(e) => setDescription(e.target.value)}
@@ -57,24 +59,26 @@ const CreateToDo = ({onTodoCreated}) => {
         </label>
 
         <label className='flex flex-col text-gray-800 text-sm font-medium'>
-          Priority 
-          <span className='flex gap-8'>
-            <button type="button" className='cursor-pointer px-2 py-1 bg-green-500 text-white font-bold rounded-lg' value={priority} onClick={()=>setPriority("Low")}>Low</button>
-            <button type="button" className='cursor-pointer px-2 py-1 bg-yellow-500 text-white font-bold rounded-lg' value={priority} onClick={() => setPriority("Medium")}>Medium</button>
-            <button type='button' className='focus:shadow-2xl cursor-pointer px-2 py-1 bg-red-500 text-white font-bold rounded-lg' value={priority} onClick={() => setPriority("High")}>High</button>
+          <span className='text-black text-lg'>Task Priority</span>
+          {/* Task Priority  */}
+          <span className='flex gap-8  text-sm'>
+            <button type="button" className='cursor-pointer w-16 h-6 hover:shadow-green-600 bg-green-500 text-white font-bold rounded-lg' value={priority} onClick={()=>setPriority("Low")}>Low</button>
+            <button type="button" className='cursor-pointer w-16 h-6 bg-yellow-500 text-white font-bold rounded-lg' value={priority} onClick={() => setPriority("Medium")}>Medium</button>
+            <button type='button' className='focus:shadow-2xl cursor-pointer w-16 h-6 bg-red-500 text-white font-bold rounded-lg' value={priority} onClick={() => setPriority("High")}>High</button>
           </span>
         </label>
 
         <label className='flex flex-col text-gray-800 text-sm font-medium'>
-          Due Date 
+          {/* Due Date  */}
+          <span className='text-black text-lg'>Due Date</span>
           <span className='flex gap-8'>
-            <input className='px-2 py-1 bg-red-400 text-white font-bold rounded-lg' type="date" value={date} onChange={(e) => setDate(e.target.value)}/>
+            <input className='w-46 h-8 bg-red-300 hover:bg-red-400 cursor-pointer text-white font-bold rounded-lg' type="date" value={date} onChange={(e) => setDate(e.target.value)}/>
           </span>
         </label>
 
         <button
           type="submit"
-          className="bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition"
+          className="bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition cursor-pointer"
           onClick={handleSubmit}
         >
           Add Task

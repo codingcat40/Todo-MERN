@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import Logo from '../assets/Logo.png'
 import { useEffect } from 'react'
@@ -13,6 +13,7 @@ const Navbar = () => {
   useEffect(() => {
     
      axios.get('http://localhost:3001/api/check-session', {withCredentials: true}).then((res) => {
+        console.log(res.data)
         setLoggedIn(true);
       }).catch((err) => console.log(err))
 
@@ -28,16 +29,16 @@ const Navbar = () => {
   }
 
   return (
-    <nav className='bg-white shadow-md fixed w-full top-0 left-0 z-50'>
+    <nav className='bg-black text-white shadow-md fixed w-full top-0 left-0 z-50'>
         <div className='max-w-7xl mx-auto px-6 py-4 flex flex-row items-center justify-between'>
           <img src={Logo} className='h-6 w-6 cursor-pointer'/>
 
-          <ul className='hidden md:flex space-x-6 text-gray-600 font-medium'>
-            <Link to='/' className='hover:text-green-600 p-1 cursor-pointer'>Home</Link>
+          <ul className='hidden md:flex space-x-6 font-medium'>
+            <Link to='/' className='hover:text-green-600 p-1 cursor-pointer hover:text-lg transition-all duration-200'>Home</Link>
             {
               loggedIn && <>
-              <Link to='/todo-items' className='hover:text-green-600 p-1 cursor-pointer'>To-do List</Link>
-              <Link to='/notes-items' className='hover:text-green-600 p-1 cursor-pointer'>Notes</Link>
+              <Link to='/todo-items' className='hover:text-green-600 p-1 cursor-pointer hover:text-lg transition-all duration-200'>To-do List</Link>
+              {/* <Link to='/notes-items' className='hover:text-green-600 p-1 cursor-pointer'>Notes</Link> */}
               <button onClick={handleLogout} className='hover:text-red-600 hover:text-lg p-1 cursor-pointer transition-all duration-200 hover:rounded-xl'>Logout</button>
             </>
             }
